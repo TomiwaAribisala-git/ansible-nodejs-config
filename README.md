@@ -5,5 +5,5 @@ ansible linode -i hosts -m ping
 ```
 
 ```
-ansible-playbook sala-node-playbook.yml
+ansible-playbook -i hosts sala-node-playbook.yml
 ```
