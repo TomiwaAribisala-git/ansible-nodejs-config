@@ -1,0 +1,41 @@
+---
+- name: install node and npm
+  hosts: linode
+  tasks:
+   - name: update apt repo and cache
+     apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+   - name: install nodejs and npm
+     apt:
+      pkg:
+       - nodejs
+       - npm
+
+- name: create new linux user for node app
+  hosts: linode
+  tasks: 
+   - name: create linux user
+     user:
+      name: sala
+      comment: sala adm
+      group: adm 
+
+- name: deploy nodejs app
+  hosts: linode
+  become: True
+  become_user: sala
+  tasks: 
+   - name: unpack the nodejs file
+     unarchive: 
+      src: /mnt/c/Users/Tomiwa/Documents/cloud_engineering_roadmap/node-project/app/bootcamp-node-project-1.0.0.tgz
+      dest: /home/sala
+   - name: install dependencies
+     npm:
+      path: /home/sala/package
+   - name: start nodejs app
+     command: node /home/sala/package/server
+     async: 1000
+     poll: 0
+   - name: ensure app is running
+     shell: ps aux | grep node
+     register: node_app_status
+   - debug: msg={{node_app_status.stdout_lines}}

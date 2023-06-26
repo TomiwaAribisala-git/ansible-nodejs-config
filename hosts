@@ -1,0 +1,6 @@
+[linode]
+45.79.152.35
+
+[linode:vars]
+ansible_ssh_password=terminalcrack12.
+ansible_user=root
